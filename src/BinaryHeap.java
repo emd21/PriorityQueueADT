@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.HashMap;
 /*
  * Array based implementation of binary heap. First element at index 1.
  * Respects FIFO scheme for nodes with identical keys.
@@ -25,6 +26,7 @@ import java.util.Calendar;
 public class BinaryHeap<ElementType, KeyType extends Comparable<KeyType>>
 implements PriorityQueue<ElementType, KeyType>{
 	
+	private HashMap<KeyType, Integer> hashMap;
 	private Node<ElementType, KeyType>[] heap;
 	private int size;
 	private int capacity;
@@ -33,6 +35,7 @@ implements PriorityQueue<ElementType, KeyType>{
 	@ensures({"$this.heap != null"})
 	public BinaryHeap(int capacity) {
 		
+		this.hashMap = new HashMap<KeyType, Integer>();
 		this.capacity = capacity;
 		this.heap = (Node<ElementType, KeyType>[]) new Node <?,?>[10];
 		this.size = 0;
@@ -70,6 +73,16 @@ implements PriorityQueue<ElementType, KeyType>{
 	public void insert(ElementType el,KeyType key){
 		
 		Node<ElementType, KeyType> newNode = new Node(el,key);
+		Integer hashValue = hashMap.get(key);
+		if( hashValue == null) {
+			hashMap.put(key, 0);
+			newNode.copyID = 0;
+		}
+		else {
+			hashMap.put(key, hashValue +1);
+			newNode.setCopyID(hashMap.get(key));
+		}
+
 		if(this.size==0) {
 			heap[1] = newNode;
 			++size;
@@ -151,6 +164,33 @@ implements PriorityQueue<ElementType, KeyType>{
 		})
 	public ElementType remove() {
 		
+
+		KeyType rootKey = heap[1].key;
+		int numberCopiesRoot = hashMap.get(rootKey);
+
+		if(numberCopiesRoot == 0) {
+			hashMap.remove(rootKey);
+		}
+		else {
+
+			int copiesFound = 0;
+			for(int i=2;i<heap.length;i++) {
+				if(heap[i].key.compareTo(rootKey)== 0) {
+					if(heap[i].copyID == 0) {
+						Node<ElementType, KeyType>temp = heap[i];
+						heap[i] = heap[1];
+						heap[1] = temp;
+						temp = null;
+					}
+					copiesFound++;
+					heap[i].copyID --;
+				}
+				if(copiesFound == numberCopiesRoot)
+					break;
+			}
+			this.hashMap.put(rootKey, numberCopiesRoot - 1);
+		}
+
 		ElementType dataRoot = heap[1].data;
 		heap[1] = heap[this.size];
 		heap[this.size] = null;
@@ -208,15 +248,26 @@ implements PriorityQueue<ElementType, KeyType>{
 		
 		private Data data;
 		private Key key;
+		private int copyID;
 		// should the timeStamp be tied to the node or to the insert action? Since we technically can insert
 		// the same node multiple times...
 		private String timeStamp; //timestamp to help us ensure FIFO
-		
+
 		public Node(Data data,Key key) {
 			this.data = data;
 			this.key = key;
+			this.copyID = 0;
+
+		}
+
+		public int getCopyID(){
+			return this.copyID;
 			this.timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 		}
+		public void setCopyID(int newCopyID){
+			this.copyID = newCopyID;
+		}
+
 		public Data getData(){
 			return this.data;
 		}
