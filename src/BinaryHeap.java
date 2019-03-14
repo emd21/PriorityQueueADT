@@ -257,12 +257,12 @@ implements PriorityQueue<ElementType, KeyType>{
 			this.data = data;
 			this.key = key;
 			this.copyID = 0;
+			this.timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 
 		}
 
 		public int getCopyID(){
 			return this.copyID;
-			this.timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 		}
 		public void setCopyID(int newCopyID){
 			this.copyID = newCopyID;
