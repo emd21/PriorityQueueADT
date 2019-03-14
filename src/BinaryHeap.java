@@ -108,7 +108,7 @@ implements PriorityQueue<ElementType, KeyType>{
 		
 		return;
 	}
-	
+
 	@requires({"true"})
 	@ensures({"$this.result == true"})
 	public boolean isSorted(){
@@ -130,18 +130,19 @@ implements PriorityQueue<ElementType, KeyType>{
 		return true;
 	}
 	
-	
+	@requires("true")
 	public boolean isEmpty() {
 		return this.size==0;
 	}
-	
+
+    @requires("true")
 	public boolean isFull() {
 		return this.size==this.capacity;
 	}
 
-	@requires({"$this.isFull() == true"})
-	@ensures({"$this.heap.length == $old(this.heap.length)*2"})
-
+//  The contracts are not required since the method below is private
+//	@requires({"$this.isFull() == true"})
+//	@ensures({"$this.heap.length == $old(this.heap.length)*2"})
 	private void doubleSizeArray(){
 		
 		Node<ElementType, KeyType>[] newArray = (Node<ElementType, KeyType>[]) new Node <?,?>[this.heap.length * 2];
@@ -163,8 +164,6 @@ implements PriorityQueue<ElementType, KeyType>{
 		"$this.isSorted() == true"
 		})
 	public ElementType remove() {
-		
-
 		KeyType rootKey = heap[1].key;
 		int numberCopiesRoot = hashMap.get(rootKey);
 
@@ -249,10 +248,12 @@ implements PriorityQueue<ElementType, KeyType>{
 		private Data data;
 		private Key key;
 		private int copyID;
-		// should the timeStamp be tied to the node or to the insert action? Since we technically can insert
-		// the same node multiple times...
-		private String timeStamp; //timestamp to help us ensure FIFO
+		private String timeStamp; //timestamp to help with FIFO
 
+        @requires({"$this.key != null",
+                "$this.data != null"})
+        @ensures({"$this.copyID != null",
+                "$this.timeStamp != null"})
 		public Node(Data data,Key key) {
 			this.data = data;
 			this.key = key;
@@ -286,6 +287,8 @@ implements PriorityQueue<ElementType, KeyType>{
 		public void setTimeStamp(String timeStamp){
 			this.timeStamp = timeStamp;
 		}
+
+		@requires("true")
 		public boolean equals(Node<Data,Key> otherNode) {
 			return this.key.equals(otherNode.key) && this.data.equals(otherNode.data);
 		}
