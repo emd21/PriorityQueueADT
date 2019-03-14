@@ -1,5 +1,5 @@
 // This main class will test out the Binary Heap and ensure contracts are being upheld
-
+package src;
 
 public class Main {
     public static void main(String[] args) {
@@ -47,21 +47,6 @@ public class Main {
         System.out.println("The element with the smallest key now is: " + queue.min());
         queue.remove();
 
-
-        testContracts();
-
-    }
-
-    public static void testContracts (){
-
-        BinaryHeap queue = new BinaryHeap(3);
-
-        queue.insert("twelve",12);
-        queue.insert("eleven",11);
-        queue.insert("ten",10);
-        queue.insert("nine",9);
-        queue.insert("twelve the second",12);
-        queue.insert("eleven the second",11);
 
 
     }

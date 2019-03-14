@@ -1,11 +1,8 @@
+package src;
+
 import be.ac.ua.ansymo.adbc.annotations.ensures;
 import be.ac.ua.ansymo.adbc.annotations.invariant;
 import be.ac.ua.ansymo.adbc.annotations.requires;
-
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.HashMap;
 /*
  * Array based implementation of binary heap. First element at index 1.
@@ -41,20 +38,20 @@ implements PriorityQueue<ElementType, KeyType>{
 	}
 	
 	@requires({"true"})
-	@ensures({"$result>=0"})
+	@ensures({"$this.result>=0"})
 	public int getSize(){
 		return this.size;
 	}
 	
 	@requires({"true"})
-	@ensures({"$result>=2"})
+	@ensures({"$this.result>=2"})
 	public int getCapacity(){
 		return this.capacity;
 	}
-	
+
 
 	@requires({"true"})
-	@ensures({"$result != null"})
+	@ensures({"$this.result != null"})
 	public Node<ElementType, KeyType>[] getHeap() {
 		return this.heap;
 	}
@@ -247,7 +244,6 @@ implements PriorityQueue<ElementType, KeyType>{
 		private Data data;
 		private Key key;
 		private int copyID;
-		private String timeStamp; //timestamp to help with FIFO
 
         @requires({"key != null",
                 "data != null"})
@@ -257,7 +253,6 @@ implements PriorityQueue<ElementType, KeyType>{
 			this.data = data;
 			this.key = key;
 			this.copyID = 0;
-			this.timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 
 		}
 
@@ -279,12 +274,6 @@ implements PriorityQueue<ElementType, KeyType>{
 		}
 		public void setKey(Data newKey){
 			this.data = newKey;
-		}
-		public String getTimeStamp(){
-			return this.timeStamp;
-		}
-		public void setTimeStamp(String timeStamp){
-			this.timeStamp = timeStamp;
 		}
 
 		@requires("true")
