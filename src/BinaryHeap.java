@@ -1,5 +1,3 @@
-package src;
-
 import be.ac.ua.ansymo.adbc.annotations.ensures;
 import be.ac.ua.ansymo.adbc.annotations.invariant;
 import be.ac.ua.ansymo.adbc.annotations.requires;
@@ -43,19 +41,20 @@ implements PriorityQueue<ElementType, KeyType>{
 	}
 	
 	@requires({"true"})
-	@ensures({"$this.result>=0"})
+	@ensures({"$result>=0"})
 	public int getSize(){
 		return this.size;
 	}
 	
 	@requires({"true"})
-	@ensures({"$this.result>=2"})
+	@ensures({"$result>=2"})
 	public int getCapacity(){
 		return this.capacity;
 	}
+	
 
 	@requires({"true"})
-	@ensures({"$this.result != null"})
+	@ensures({"$result != null"})
 	public Node<ElementType, KeyType>[] getHeap() {
 		return this.heap;
 	}
@@ -67,7 +66,7 @@ implements PriorityQueue<ElementType, KeyType>{
 		})
 	@ensures({
 		"$this.size == $old($this.size) + 1",
-		"$this.heap[size] != null ",
+		"$this.heap[$this.size] != null ",
 		"$this.isSorted() == true"
 		})
 	public void insert(ElementType el,KeyType key){
@@ -110,7 +109,7 @@ implements PriorityQueue<ElementType, KeyType>{
 	}
 
 	@requires({"true"})
-	@ensures({"$this.result == true"})
+	@ensures({"$result == true"})
 	public boolean isSorted(){
 		for(int i = 1; i< heap.length;i++){
 			if(heap[i] == null) {
@@ -160,7 +159,7 @@ implements PriorityQueue<ElementType, KeyType>{
 		})
 	@ensures({
 		"$this.size == $old($this.size) - 1",
-		"$this.heap[size] == null ",
+		"$this.heap[$old($this.size)] == null ",
 		"$this.isSorted() == true"
 		})
 	public ElementType remove() {
@@ -250,8 +249,8 @@ implements PriorityQueue<ElementType, KeyType>{
 		private int copyID;
 		private String timeStamp; //timestamp to help with FIFO
 
-        @requires({"$this.key != null",
-                "$this.data != null"})
+        @requires({"key != null",
+                "data != null"})
         @ensures({"$this.copyID != null",
                 "$this.timeStamp != null"})
 		public Node(Data data,Key key) {

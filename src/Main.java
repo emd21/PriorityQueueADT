@@ -1,13 +1,12 @@
 // This main class will test out the Binary Heap and ensure contracts are being upheld
 
-package src;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello, and welcome to our Priority Queue ADT");
 
         // creating a priority queue with capacity 3:
-        BinaryHeap queue = new BinaryHeap(3);
+        BinaryHeap queue = new BinaryHeap(10);
 
         System.out.println("The capacity of the queue is: " + queue.getCapacity());
         System.out.println("The size of the queue is: " + queue.getSize());
