@@ -9,12 +9,12 @@ import java.util.HashMap;
  */
 
 
-//@invariant ({
-//	"$this.capacity>=1",
-//	"$this.size >=0 ",
-//	"$this.size <= $this.capacity",
-//	"$this.heap[0] == null"
-//	})
+@invariant ({
+	"$this.capacity>=1",
+	"$this.size >=0 ",
+	"$this.size <= $this.capacity",
+	"$this.heap[0] == null"
+	})
 
 public class BinaryHeap<ElementType, KeyType extends Comparable<KeyType>>
 implements PriorityQueue<ElementType, KeyType>{
@@ -24,8 +24,8 @@ implements PriorityQueue<ElementType, KeyType>{
 	private int size;
 	private int capacity;
 	
-//	@requires({"capacity >= 1"})
-//	@ensures({"$this.heap != null"})
+	@requires({"capacity >= 1"})
+	@ensures({"$this.heap != null"})
 	public BinaryHeap(int capacity) {
 		
 		this.hashMap = new HashMap<KeyType, Integer>();
@@ -35,36 +35,36 @@ implements PriorityQueue<ElementType, KeyType>{
 		
 	}
 	
-//	@requires({"true"})
-	//@ensures({"$this.result>=0"})
+	@requires({"true"})
+	@ensures({"$result>=0"})
 	public int getSize(){
 		
 		return this.size;
 	}
 	
-//	@requires({"true"})
-	//@ensures({"$this.result>=2"})
+	@requires({"true"})
+	@ensures({"$result>=2"})
 	public int getCapacity(){
 		
 		return this.capacity;
 	}
-//	@requires({"true"})
-//	@ensures({"$this.result != null"})
+	@requires({"true"})
+	@ensures({"$result != null"})
 	public Node<ElementType, KeyType>[] getHeap() {
 		
 		return this.heap;
 	}
 	
-//	@requires({
-//		"key != null",
-//		"$this.isFull() == false",
-//		"$this.isSorted() == true"
-//		})
-//	@ensures({
-//		"$this.size == $old($this.size) + 1",
-//		"$this.heap[size] != null ",
-//		"$this.isSorted() == true"
-//		})
+	@requires({
+		"key != null",
+		"$this.isFull() == false",
+		"$this.isSorted() == true"
+		})
+	@ensures({
+		"$this.size == $old($this.size) + 1",
+		"$this.heap[$this.size] != null ",
+		"$this.isSorted() == true"
+	})
 	public void insert(ElementType el,KeyType key){
 		
 		Node<ElementType, KeyType> newNode = new Node(el,key);
@@ -102,8 +102,8 @@ implements PriorityQueue<ElementType, KeyType>{
 		return;
 	}
 	
-//	@requires({"true"})
-//	@ensures({"$this.result == true"})
+	@requires({"true"})
+	@ensures({"$result == true"})
 	public boolean isSorted(){
 		for(int i = 1; i< heap.length;i++){
 			
@@ -124,11 +124,12 @@ implements PriorityQueue<ElementType, KeyType>{
 		return true;
 	}
 	
-	
+	@requires("true")
 	public boolean isEmpty() {
 		return this.size==0;
 	}
 	
+	@requires("true")
 	public boolean isFull() {
 		return this.size==this.capacity;
 	}
@@ -144,15 +145,15 @@ implements PriorityQueue<ElementType, KeyType>{
 		
 		return;
 	}
-//	@requires({
-//		"$this.isEmpty() == false",
-//		"$this.isSorted() == true"
-//		})
-//	@ensures({
-//		"$this.size == $old($this.size) - 1",
-//		"$this.heap[size] == null ",
-//		"$this.isSorted() == true"
-//		})
+	@requires({
+		"$this.isEmpty() == false",
+		"$this.isSorted() == true"
+		})
+	@ensures({
+		"$this.size == $old($this.size) - 1",
+		"$this.heap[$old($this.size)] == null ",
+		"$this.isSorted() == true"
+		})
 	public ElementType remove() {
 		
 
@@ -230,21 +231,24 @@ implements PriorityQueue<ElementType, KeyType>{
 		}
 	}
 	//Should there be post conditions here?
-//	@requires({"$this.isEmpty() == false"})
+	@requires({"$this.isEmpty() == false"})
 	public  ElementType min() {
 		
 		return heap[1].data;
 	}
 	
-//	@invariant({
-//		"$this.key != null"
-//	})
+	@invariant({
+		"$this.key != null"
+		})
 	public static class Node<Data,Key>{
 		
 		private Data data;
 		private Key key;
 		private int copyID;
 		
+		 @requires({"key != null",
+		 			"data != null"})
+		 @ensures({"$this.copyID != null"})
 		public Node(Data data,Key key) {
 			this.data = data;
 			this.key = key;
